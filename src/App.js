@@ -39,8 +39,9 @@ function App() {
   function closeModal() {
     setIsOpen(false);
   }
-
-  
+  if (pokemon.id>0){
+    countRef.current=false
+  }
 const fetchPokemon =(valor)=>{
   fetch(`https://pokeapi.co/api/v2/pokemon/${valor}`)
 .then((response)=>response.json())
@@ -51,41 +52,43 @@ useEffect(()=>{
   console.log("dato"+countRef.current)
 },[pokemon]);
 
+
 const getRandomInt =(min =1,max=600)=>{
  setValor(Math.floor(Math.random()*(max-min)+min));
+ 
 fetchPokemon(valor)
 };
 
 const next =()=>{ if((pokemon.id===600) || (isNaN(pokemon.id))){
   alert("El maximo es 600" );
-  countRef.current=false
   console.log(countRef.current)
   return pokemon.id=1
   
 }else{
-  countRef.current=false
   return pokemon.id+1
 
 } 
 };
 const back =()=>{if(pokemon.id===1 || (isNaN(pokemon.id))){
   alert("El minimo es 1" );
-  countRef.current=false
   return pokemon.id = 600;
 }else{
-  countRef.current=false
   return pokemon.id - 1
 } };
-const Typename = (event) => {
+const Typename = ( event) => {
   setname(event.target.value);
 };
 
 const Search = () => {
-  if (name !== "" && name >=601 ) {
+  if (name !== "" && name  >=601 ) {
   alert("Pokemon no encontrado! ingrese otro Nombre o ID" );
   return fetchPokemon("1");
-}return fetchPokemon(name)};
+}else{
+
+  return fetchPokemon(name)
+} }; 
   return (
+    <div className='color'>
     <div className="App">
       <header className="App-header">
         <div className='flex-container'>  
@@ -111,7 +114,7 @@ const Search = () => {
         ariaHideApp={false}
     >
         <h2 ref={(_subtitle) => (subtitle = _subtitle)}>{pokemon.name}</h2>
-        <h3 ref={(_subtitle) => (subtitle = _subtitle)}>{'N°0'+pokemon.id}</h3>
+        <h3 ref={(_subtitle) => (subtitle = _subtitle)}>{'N°'+pokemon.id}</h3>
         <h4>Abilities:  </h4>
         <p>{pokemon.abilities?.map((ability) => <li>{ability.ability?.name}</li>)??"no hay datos"}</p>
           <button className="button" onClick={closeModal}>close</button>
@@ -133,6 +136,7 @@ const Search = () => {
           Repository
         </a>
       </header>
+    </div>
     </div>
   );
 }
